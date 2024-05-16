@@ -12,6 +12,7 @@ import { UserModule } from './user/user.module';
 import { PrismaModule } from './prisma/prisma.module';
 // import * as passport from 'passport';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TaskModule } from './task/task.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    TaskModule,
   ],
   controllers: [AppController],
   providers: [AppService],

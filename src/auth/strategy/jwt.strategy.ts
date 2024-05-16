@@ -33,7 +33,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 
     if (!user) throw new ForbiddenException('No user!');
     delete user.password;
-    delete user.id;
+    // delete user.id;
     delete user.createdAt;
     delete user.updatedAt;
 

@@ -5,7 +5,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy, LocalStrategy } from './strategy';
 import { PassportModule } from '@nestjs/passport';
 import { SessionSerializer } from './serializer';
-import { RoleGuard } from './guard';
+
 // import { LocalStrategy } from './strategy/local.strategy';
 // import { PrismaModule } from 'src/prisma/prisma.module';
 
@@ -13,12 +13,6 @@ import { RoleGuard } from './guard';
   // imports: [PrismaModule],
   imports: [JwtModule.register({}), PassportModule.register({ session: true })],
   controllers: [AuthController],
-  providers: [
-    AuthService,
-    JwtStrategy,
-    LocalStrategy,
-    SessionSerializer,
-    RoleGuard,
-  ],
+  providers: [AuthService, JwtStrategy, LocalStrategy, SessionSerializer],
 })
 export class AuthModule {}
