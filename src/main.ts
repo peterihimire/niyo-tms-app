@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import * as cookieParser from 'cookie-parser';
 // import { RoleExceptionFilter } from './exception';
 
 async function bootstrap() {
@@ -18,11 +19,12 @@ async function bootstrap() {
     credentials: true,
   });
   const configService = app.get(ConfigService);
+
   app.setGlobalPrefix('api/taskmgt/v1/');
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  app.use(cookieParser());
 
   const port = configService.get('PORT') || 8090;
-  // app.useGlobalFilters(new RoleExceptionFilter());
   await app.listen(port);
 }
 bootstrap();

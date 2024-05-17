@@ -5,7 +5,7 @@ import {
   // ForbiddenException, Logger
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+// import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { AddTaskDto, EditTaskDto } from './dto';
 
 @Injectable()
@@ -15,8 +15,21 @@ export class TaskService {
   // @route GET api/admin/get_user_by_acct_id
   // @desc To update user by account ID
   // @access Private
-  async addTask(dto: AddTaskDto) {
+  async addTask(dto: AddTaskDto, userInfo: any) {
     try {
+      const foundTask = await this.prisma.task.findFirst({
+        where: {
+          title: dto.title,
+          userId: userInfo.id,
+        },
+      });
+
+      if (foundTask) {
+        throw new ConflictException(
+          `Task with title '${dto.title}' already exists for this user!`,
+        );
+      }
+
       console.log('This is add-task dto  payload', dto);
       // Logger.verbose('This is user payload', user);
 
@@ -29,23 +42,41 @@ export class TaskService {
           dueDate: date,
           category: dto.category,
           priority: dto.priority,
-          userId: dto.userId,
+          userId: userInfo.id,
         },
       });
-
+      const {
+        title,
+        desc,
+        dueDate,
+        category,
+        createdAt,
+        updatedAt,
+        priority,
+        uuid,
+      } = newTask;
       return {
         status: 'success',
         msg: 'Task created',
-        data: newTask,
+        data: {
+          title,
+          desc,
+          category,
+          dueDate,
+          priority,
+          uuid,
+          createdAt,
+          updatedAt,
+        },
       };
     } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2002') {
-          throw new ConflictException(
-            `Task title '${dto.title}' already exist!`,
-          );
-        }
-      }
+      // if (error instanceof PrismaClientKnownRequestError) {
+      //   if (error.code === 'P2002') {
+      //     throw new ConflictException(
+      //       `Task title '${dto.title}' already exist!`,
+      //     );
+      //   }
+      // }
       throw error;
     } finally {
       await this.prisma.$disconnect(); // Disconnect the Prisma client
@@ -55,9 +86,13 @@ export class TaskService {
   // @route GET api/admin/get_user_by_acct_id
   // @desc To update user by account ID
   // @access Private
-  async getTasks() {
+  async getTasks(userInfo) {
     try {
-      const all_tasks = await this.prisma.task.findMany();
+      const all_tasks = await this.prisma.task.findMany({
+        where: {
+          userId: userInfo.id,
+        },
+      });
       if (!all_tasks) throw new NotFoundException('No task found!');
 
       return {
@@ -75,10 +110,13 @@ export class TaskService {
   // @route GET api/admin/get_user_by_acct_id
   // @desc To update user by account ID
   // @access Private
-  async getTaskById(id: string) {
+  async getTaskById(id: string, userInfo) {
     try {
       const task = await this.prisma.task.findUnique({
-        where: { uuid: id },
+        where: {
+          uuid: id,
+          userId: userInfo.id,
+        },
       });
 
       if (!task) throw new NotFoundException('Task does not exist!');
@@ -98,10 +136,13 @@ export class TaskService {
   // @route GET api/admin/get_user_by_acct_id
   // @desc To update user by account ID
   // @access Private
-  async editTask(id: string, dto: EditTaskDto) {
+  async editTask(id: string, dto: EditTaskDto, userInfo) {
     try {
       const task = await this.prisma.task.findUnique({
-        where: { uuid: id },
+        where: {
+          uuid: id,
+          userId: userInfo.id,
+        },
       });
       if (!task) throw new NotFoundException('Task does not exist!');
 
@@ -117,10 +158,29 @@ export class TaskService {
         },
       });
 
+      const {
+        title,
+        desc,
+        dueDate,
+        category,
+        createdAt,
+        updatedAt,
+        priority,
+        uuid,
+      } = updatedtask;
       return {
         status: 'success',
         msg: 'Task updated',
-        data: updatedtask,
+        data: {
+          title,
+          desc,
+          category,
+          dueDate,
+          priority,
+          uuid,
+          createdAt,
+          updatedAt,
+        },
       };
     } catch (error) {
       throw error;
@@ -132,10 +192,13 @@ export class TaskService {
   // @route GET api/admin/get_user_by_acct_id
   // @desc To update user by account ID
   // @access Private
-  async deleteTask(id: string) {
+  async deleteTask(id: string, userInfo) {
     try {
       const task = await this.prisma.task.findUnique({
-        where: { uuid: id },
+        where: {
+          uuid: id,
+          userId: userInfo.id,
+        },
       });
       if (!task) throw new NotFoundException('Task does not exist!');
 

@@ -1,6 +1,6 @@
 import {
   IsNotEmpty,
-  IsNumber,
+  // IsNumber,
   IsString,
   // IsDate,
   // IsEnum,
@@ -32,7 +32,7 @@ export class AddTaskDto {
   @IsNotEmpty()
   priority: string;
 
-  @IsNumber()
-  @IsNotEmpty()
-  userId: number;
+  // @IsNumber()
+  // @IsNotEmpty()
+  // userId: number;
 }

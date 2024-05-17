@@ -16,10 +16,10 @@ import {
 } from 'src/auth/guard';
 import { GetUser } from 'src/auth/decorator';
 import { AddTaskDto, EditTaskDto } from './dto';
-import {
-  User,
-  // Cart
-} from '@prisma/client';
+// import {
+//   User,
+//   Cart
+// } from '@prisma/client';
 import {
   HttpExceptionFilter,
   // RoleExceptionFilter,
@@ -34,39 +34,48 @@ export class TaskController {
   @Post('add_task')
   @UseFilters(HttpExceptionFilter)
   @UseGuards(JwtGuard) //individual route
-  addtask(@Body() dto: AddTaskDto, @GetUser() user: User) {
+  addtask(@Body() dto: AddTaskDto, @GetUser() user) {
     console.log('Here is my dto object...', dto, user);
-    console.log('This is user object...', user);
-    return this.taskService.addTask(dto);
+    console.log('Baba user object...', user);
+    const userInfo = user.data;
+    return this.taskService.addTask(dto, userInfo);
   }
 
   @Get('get_tasks')
   @UseFilters(HttpExceptionFilter)
   @UseGuards(JwtGuard)
-  gettasks() {
-    return this.taskService.getTasks();
+  gettasks(@GetUser() user) {
+    const userInfo = user.data;
+    return this.taskService.getTasks(userInfo);
   }
 
   // @UseFilters(RoleExceptionFilter)
   @Get('get_task/:id')
   @UseFilters(HttpExceptionFilter)
   @UseGuards(JwtGuard)
-  gettask(@Param('id') id: string, @GetUser() user: User) {
+  gettask(@Param('id') id: string, @GetUser() user) {
     console.log('This is user object...', user);
-    return this.taskService.getTaskById(id);
+    const userInfo = user.data;
+    return this.taskService.getTaskById(id, userInfo);
   }
 
-  @Patch('edit_task/:id')
+  @Patch('update_task/:id')
   @UseFilters(HttpExceptionFilter)
   @UseGuards(JwtGuard)
-  updatetask(@Param('id') id: string, @Body() dto: EditTaskDto) {
-    return this.taskService.editTask(id, dto);
+  updatetask(
+    @Param('id') id: string,
+    @Body() dto: EditTaskDto,
+    @GetUser() user,
+  ) {
+    const userInfo = user.data;
+    return this.taskService.editTask(id, dto, userInfo);
   }
 
   @Delete('delete_task/:id')
   @UseFilters(HttpExceptionFilter)
   @UseGuards(JwtGuard)
-  deletetask(@Param('id') id: string) {
-    return this.taskService.deleteTask(id);
+  deletetask(@Param('id') id: string, @GetUser() user) {
+    const userInfo = user.data;
+    return this.taskService.deleteTask(id, userInfo);
   }
 }

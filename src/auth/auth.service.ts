@@ -2,6 +2,7 @@ import {
   ForbiddenException,
   Injectable,
   ConflictException,
+  // Response,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthDto, RegDto } from './dto';
@@ -9,6 +10,7 @@ import * as argon from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -57,7 +59,7 @@ export class AuthService {
   // @route GET api/admin/get_user_by_acct_id
   // @desc To update user by account ID
   // @access Private
-  async login(dto: AuthDto) {
+  async login(dto: AuthDto, res: Response) {
     try {
       const user = await this.prisma.user.findUnique({
         where: {
@@ -76,18 +78,24 @@ export class AuthService {
 
       // return user;
       // return this.signToken(user.acctId, user.email);
-      const access_token = await this.signToken(user.acctId, user.email);
-      return {
+      const token = await this.signToken(user.acctId, user.email);
+      console.log('Access_token...', token.access_token, user);
+      res.cookie('token', token.access_token, { httpOnly: true });
+
+      res.json({
         status: 'success',
-        msg: 'User login successful!',
-        data: { ...user, ...access_token },
-      };
+        msg: 'Login successful!',
+        data: {
+          ...user,
+          ...token,
+        },
+      });
     } catch (error) {
+      console.log('This is error:', error);
       throw error;
     } finally {
       await this.prisma.$disconnect(); // Disconnect the Prisma client
     }
-    // return { msg: 'Registration success' };
   }
 
   async signToken(
@@ -101,10 +109,10 @@ export class AuthService {
     const secret = this.config.get('JWT_SECRET');
 
     const token = await this.jwt.signAsync(payload, {
-      expiresIn: '1h',
+      expiresIn: '10h',
       secret: secret,
     });
-
+    console.log('Signed token...', token);
     return {
       access_token: token,
     };
@@ -145,21 +153,21 @@ export class AuthService {
       if (!verifyPass)
         throw new ForbiddenException('Credential to login incorrect!');
 
-      const userWithRoleNames = {
+      const userInfo = {
         ...user,
       };
 
-      console.log('These are his roles...', userWithRoleNames);
+      console.log('These are his roles...', userInfo);
 
-      delete userWithRoleNames.password;
-      delete userWithRoleNames.id;
-      delete userWithRoleNames.createdAt;
-      delete userWithRoleNames.updatedAt;
+      delete userInfo.password;
+      delete userInfo.id;
+      delete userInfo.createdAt;
+      delete userInfo.updatedAt;
 
       return {
         status: 'success',
-        msg: 'Login successful!',
-        data: userWithRoleNames,
+        msg: 'Login success!',
+        data: userInfo,
       };
     } catch (error) {
       throw error;
@@ -167,20 +175,4 @@ export class AuthService {
       await this.prisma.$disconnect(); // Disconnect the Prisma client
     }
   }
-
-  // // @route GET api/admin/get_user_by_acct_id
-  // // @desc To update user by account ID
-  // // @access Private
-  // async signout() {
-  //   try {
-  //     return {
-  //       status: 'success',
-  //       msg: 'Logout successful!',
-  //     };
-  //   } catch (error) {
-  //     throw error;
-  //   } finally {
-  //     await this.prisma.$disconnect(); // Disconnect the Prisma client
-  //   }
-  // }
 }

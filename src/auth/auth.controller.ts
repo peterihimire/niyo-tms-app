@@ -1,9 +1,7 @@
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto, RegDto } from './dto';
-// import { AuthGuard } from '@nestjs/passport';
-import { LocalGuard } from './guard/local.guard';
-// import { JwtGuard } from './guard';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -15,34 +13,19 @@ export class AuthController {
     return this.authService.register(dto);
   }
 
-  // @UseGuards(JwtGuard)
   @Post('signin')
-  login(@Body() dto: AuthDto) {
-    return this.authService.login(dto);
+  async login(@Body() dto: AuthDto, @Res() res: Response) {
+    await this.authService.login(dto, res);
   }
 
   //Get / logout
   // @UseGuards(LocalGuard)
   @Post('signout')
-  signout(@Request() req) {
-    req.session.destroy();
-
-    return {
+  signout(@Res() res) {
+    res.clearCookie('token');
+    res.json({
       status: 'success',
       msg: 'Logout successful!',
-    };
-  }
-
-  // @UseGuards(AuthGuard('local'))
-  @UseGuards(LocalGuard)
-  @Post('login')
-  signin(@Request() req) {
-    // return {
-    //   status: 'success',
-    //   msg: 'you are signed in',
-    // };
-    req.session.user = req.user;
-    // console.log('This is the user mfk...', req.session.user);
-    return req.user;
+    });
   }
 }
