@@ -7,10 +7,14 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 // import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { AddTaskDto, EditTaskDto } from './dto';
+import { TaskGateway } from './task.gateway';
 
 @Injectable()
 export class TaskService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private readonly taskGateway: TaskGateway,
+  ) {}
 
   // @route GET api/admin/get_user_by_acct_id
   // @desc To update user by account ID
@@ -45,6 +49,12 @@ export class TaskService {
           userId: userInfo.id,
         },
       });
+
+      this.taskGateway.emitTaskCreated({
+        msg: 'Task was successfully created ',
+        data: newTask,
+      });
+
       const {
         title,
         desc,
@@ -55,6 +65,7 @@ export class TaskService {
         priority,
         uuid,
       } = newTask;
+
       return {
         status: 'success',
         msg: 'Task created',
@@ -157,7 +168,10 @@ export class TaskService {
           priority: dto.priority,
         },
       });
-
+      this.taskGateway.emitTaskUpdated({
+        msg: 'Task was successfully updated ',
+        data: updatedtask,
+      });
       const {
         title,
         desc,
@@ -205,6 +219,10 @@ export class TaskService {
       await this.prisma.task.delete({
         where: { uuid: id },
       });
+
+      this.taskGateway.emitTaskDeleted(
+        `Task with ${id} was successfully deleted!`,
+      );
 
       return {
         status: 'success',
