@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as cookieParser from 'cookie-parser';
-// import { RoleExceptionFilter } from './exception';
+import { HttpExceptionFilter } from './exception';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -25,6 +25,7 @@ async function bootstrap() {
   app.use(cookieParser());
 
   const port = configService.get('PORT') || 8090;
+  app.useGlobalFilters(new HttpExceptionFilter());
   await app.listen(port);
 }
 bootstrap();

@@ -2,10 +2,8 @@ import {
   Injectable,
   ConflictException,
   NotFoundException,
-  // ForbiddenException, Logger
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-// import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { AddTaskDto, EditTaskDto } from './dto';
 import { TaskGateway } from './task.gateway';
 
@@ -81,13 +79,6 @@ export class TaskService {
         },
       };
     } catch (error) {
-      // if (error instanceof PrismaClientKnownRequestError) {
-      //   if (error.code === 'P2002') {
-      //     throw new ConflictException(
-      //       `Task title '${dto.title}' already exist!`,
-      //     );
-      //   }
-      // }
       throw error;
     } finally {
       await this.prisma.$disconnect(); // Disconnect the Prisma client
@@ -221,12 +212,12 @@ export class TaskService {
       });
 
       this.taskGateway.emitTaskDeleted(
-        `Task with ${id} was successfully deleted!`,
+        `Task with id "${id}" was successfully deleted!`,
       );
 
       return {
         status: 'success',
-        msg: 'Task deleted',
+        msg: `Task with id "${id}" was deleted.`,
       };
     } catch (error) {
       throw error;

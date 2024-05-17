@@ -39,11 +39,7 @@ export class UserService {
         ...acct,
       };
 
-      console.log('These are his roles...', userWithTasks);
-
       if (!acct) throw new ForbiddenException('No user!');
-      // const verifyPass = await argon.verify(user.password, password);
-      // if (!verifyPass) throw new ForbiddenException('Credential incorrect!');
 
       delete userWithTasks.password;
       delete userWithTasks.id;

@@ -49,7 +49,6 @@ export class TaskController {
     return this.taskService.getTasks(userInfo);
   }
 
-  // @UseFilters(RoleExceptionFilter)
   @Get('get_task/:id')
   @UseFilters(HttpExceptionFilter)
   @UseGuards(JwtGuard)

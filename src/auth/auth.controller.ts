@@ -18,8 +18,6 @@ export class AuthController {
     await this.authService.login(dto, res);
   }
 
-  //Get / logout
-  // @UseGuards(LocalGuard)
   @Post('signout')
   signout(@Res() res) {
     res.clearCookie('token');

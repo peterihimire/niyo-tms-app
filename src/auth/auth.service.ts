@@ -2,7 +2,6 @@ import {
   ForbiddenException,
   Injectable,
   ConflictException,
-  // Response,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthDto, RegDto } from './dto';
@@ -76,10 +75,8 @@ export class AuthService {
       delete user.createdAt;
       delete user.updatedAt;
 
-      // return user;
-      // return this.signToken(user.acctId, user.email);
       const token = await this.signToken(user.acctId, user.email);
-      console.log('Access_token...', token.access_token, user);
+      // console.log('Access_token...', token.access_token, user);
       res.cookie('token', token.access_token, { httpOnly: true });
 
       res.json({
@@ -156,8 +153,6 @@ export class AuthService {
       const userInfo = {
         ...user,
       };
-
-      console.log('These are his roles...', userInfo);
 
       delete userInfo.password;
       delete userInfo.id;
