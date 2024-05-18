@@ -1,9 +1,5 @@
-import {
-  IsString,
-  IsOptional,
-  // IsEnum,
-} from 'class-validator';
-// import { TaskPriority } from './TaskPriority'; // Assuming TaskPriority is your enum file
+import { IsString, IsOptional, IsEnum } from 'class-validator';
+import { TaskCategory, TaskPriority, TaskStatus } from '@prisma/client'; // Adjust the import path as needed
 
 export class EditTaskDto {
   @IsOptional()
@@ -14,19 +10,19 @@ export class EditTaskDto {
   @IsString()
   desc?: string;
 
-  @IsOptional()
-  @IsString()
-  status?: string;
+  @IsOptional() // Use @IsOptional() to allow the field to be omitted
+  @IsEnum(TaskStatus)
+  status?: TaskStatus; // Make the field optional
 
   @IsOptional()
   @IsString()
   dueDate?: string;
 
   @IsOptional()
-  @IsString()
-  category?: string;
+  @IsEnum(TaskCategory)
+  category: TaskCategory;
 
   @IsOptional()
-  @IsString()
-  priority?: string;
+  @IsEnum(TaskPriority)
+  priority: TaskPriority;
 }

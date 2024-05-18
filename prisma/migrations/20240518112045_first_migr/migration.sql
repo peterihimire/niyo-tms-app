@@ -1,8 +1,11 @@
 -- CreateEnum
-CREATE TYPE "TaskCategory" AS ENUM ('work', 'personal', 'urgent', 'home', 'school', 'other');
+CREATE TYPE "TaskCategory" AS ENUM ('WORK', 'PERSONAL', 'URGENT', 'HOME', 'SCHOOL', 'OTHER');
 
 -- CreateEnum
-CREATE TYPE "TaskPriority" AS ENUM ('low', 'medium', 'high');
+CREATE TYPE "TaskPriority" AS ENUM ('LOW', 'MEDIUM', 'HIGH');
+
+-- CreateEnum
+CREATE TYPE "TaskStatus" AS ENUM ('PENDING', 'INPROGRESS', 'COMPLETE');
 
 -- CreateTable
 CREATE TABLE "users" (
@@ -23,7 +26,7 @@ CREATE TABLE "tasks" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "title" TEXT NOT NULL,
     "desc" TEXT,
-    "status" TEXT,
+    "status" "TaskStatus" NOT NULL DEFAULT 'PENDING',
     "dueDate" TIMESTAMP(3),
     "category" "TaskCategory" NOT NULL,
     "priority" "TaskPriority" NOT NULL,
@@ -35,9 +38,6 @@ CREATE TABLE "tasks" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
-
--- CreateIndex
-CREATE UNIQUE INDEX "tasks_title_key" ON "tasks"("title");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "tasks_uuid_key" ON "tasks"("uuid");

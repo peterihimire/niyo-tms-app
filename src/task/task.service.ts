@@ -56,6 +56,7 @@ export class TaskService {
       const {
         title,
         desc,
+        status,
         dueDate,
         category,
         createdAt,
@@ -70,6 +71,7 @@ export class TaskService {
         data: {
           title,
           desc,
+          status,
           category,
           dueDate,
           priority,
@@ -97,10 +99,24 @@ export class TaskService {
       });
       if (!all_tasks) throw new NotFoundException('No task found!');
 
+      const totalTask = all_tasks.map((task) => {
+        return {
+          title: task.title,
+          desc: task.desc,
+          status: task.status,
+          dueDate: task.dueDate,
+          category: task.category,
+          createdAt: task.createdAt,
+          updatedAt: task.updatedAt,
+          priority: task.priority,
+          uuid: task.uuid,
+        };
+      });
+
       return {
         status: 'success',
         msg: 'All tasks',
-        data: all_tasks,
+        data: totalTask,
       };
     } catch (error) {
       throw error;
@@ -123,10 +139,32 @@ export class TaskService {
 
       if (!task) throw new NotFoundException('Task does not exist!');
 
+      const {
+        title,
+        desc,
+        status,
+        dueDate,
+        category,
+        createdAt,
+        updatedAt,
+        priority,
+        uuid,
+      } = task;
+
       return {
         status: 'success',
         msg: 'Task details',
-        data: task,
+        data: {
+          title,
+          desc,
+          status,
+          category,
+          dueDate,
+          priority,
+          uuid,
+          createdAt,
+          updatedAt,
+        },
       };
     } catch (error) {
       throw error;
@@ -166,6 +204,7 @@ export class TaskService {
       const {
         title,
         desc,
+        status,
         dueDate,
         category,
         createdAt,
@@ -179,6 +218,7 @@ export class TaskService {
         data: {
           title,
           desc,
+          status,
           category,
           dueDate,
           priority,
@@ -212,12 +252,12 @@ export class TaskService {
       });
 
       this.taskGateway.emitTaskDeleted(
-        `Task with id "${id}" was successfully deleted!`,
+        `Task with id [ ${id} ] was successfully deleted!`,
       );
 
       return {
         status: 'success',
-        msg: `Task with id "${id}" was deleted.`,
+        msg: `Task with id [ ${id} ] was deleted.`,
       };
     } catch (error) {
       throw error;

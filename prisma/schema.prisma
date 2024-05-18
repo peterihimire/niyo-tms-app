@@ -13,20 +13,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// enum TaskCategory {
-//   WORK
-//   PERSONAL
-//   URGENT
-//   HOME
-//   SCHOOL
-//   OTHER
-// }
+enum TaskCategory {
+  WORK
+  PERSONAL
+  URGENT
+  HOME
+  SCHOOL
+  OTHER
+}
 
-// enum TaskPriority {
-//   LOW
-//   MEDIUM
-//   HIGH
-// }
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum TaskStatus {
+  PENDING
+  INPROGRESS
+  COMPLETE
+}
 
 model User {
   id       Int    @id @default(autoincrement())
@@ -49,10 +55,10 @@ model Task {
 
   title    String       
   desc     String?
-  status   String?
+  status   TaskStatus @default(PENDING) // Use the new enum
   dueDate  DateTime?
-  category String
-  priority String
+  category TaskCategory
+  priority TaskPriority
   uuid     String       @unique @default(uuid())
 
   user   User @relation(fields: [userId], references: [id])

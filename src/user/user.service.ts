@@ -30,6 +30,8 @@ export class UserService {
               category: true,
               priority: true,
               uuid: true,
+              createdAt: true,
+              updatedAt: true,
             },
           },
         },
