@@ -3,6 +3,7 @@ import {
   Catch,
   ArgumentsHost,
   HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import {
   Response,
@@ -12,19 +13,18 @@ import {
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
-    // console.log('This is the exception', exception);
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const status = exception.getStatus();
     const message = exception.getResponse();
-    // const request = ctx.getRequest<Request>();
 
+    console.log('status yeah', status);
     response.status(status).json({
       statusCode: status,
       error: message['error'],
       message:
-        status === 403
-          ? "You do not have the required access to this resource'"
+        status === HttpStatus.UNAUTHORIZED
+          ? 'You are not authenticated!'
           : message['message'],
       // timestamp: new Date().toISOString(),
       // path: request.url,

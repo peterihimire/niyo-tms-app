@@ -16,17 +16,8 @@ import {
 } from 'src/auth/guard';
 import { GetUser } from 'src/auth/decorator';
 import { AddTaskDto, EditTaskDto } from './dto';
-// import {
-//   User,
-//   Cart
-// } from '@prisma/client';
-import {
-  HttpExceptionFilter,
-  // RoleExceptionFilter,
-  // ForbiddenException,
-} from 'src/exception';
+import { HttpExceptionFilter } from 'src/exception';
 
-// @UseGuards(JwtGuard) //parent route
 @Controller('tasks')
 export class TaskController {
   constructor(private taskService: TaskService) {}
@@ -35,8 +26,6 @@ export class TaskController {
   @UseFilters(HttpExceptionFilter)
   @UseGuards(JwtGuard) //individual route
   addtask(@Body() dto: AddTaskDto, @GetUser() user) {
-    console.log('Here is my dto object...', dto, user);
-    console.log('Baba user object...', user);
     const userInfo = user.data;
     return this.taskService.addTask(dto, userInfo);
   }
@@ -53,7 +42,6 @@ export class TaskController {
   @UseFilters(HttpExceptionFilter)
   @UseGuards(JwtGuard)
   gettask(@Param('id') id: string, @GetUser() user) {
-    console.log('This is user object...', user);
     const userInfo = user.data;
     return this.taskService.getTaskById(id, userInfo);
   }

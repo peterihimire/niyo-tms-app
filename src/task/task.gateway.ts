@@ -8,8 +8,9 @@ import {
 import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway({
+  namespace: '/api/taskmgt/v1',
   cors: {
-    origin: '*', // Adjust this according to your CORS policy
+    origin: '*',
   },
 })
 export class TaskGateway

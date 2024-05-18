@@ -26,6 +26,7 @@ async function bootstrap() {
 
   const port = configService.get('PORT') || 8090;
   app.useGlobalFilters(new HttpExceptionFilter());
+
   await app.listen(port);
 }
 bootstrap();

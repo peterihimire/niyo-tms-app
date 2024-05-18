@@ -10,7 +10,6 @@ export class UserService {
   // @access Private
   async userInfo(user: any) {
     try {
-      console.log('This is user payload', user);
       Logger.verbose('This is user payload', user);
 
       const acct = await this.prisma.user.findUnique({

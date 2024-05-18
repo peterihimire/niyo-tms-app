@@ -2,13 +2,9 @@ import { Injectable, ForbiddenException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-
 import { PrismaService } from 'src/prisma/prisma.service';
-// import { AuthDto } from './dto';
-// import * as argon from 'argon2';
-// import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { JwtService } from '@nestjs/jwt';
-// import { ConfigService } from '@nestjs/config';
+
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(
@@ -33,7 +29,6 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 
     if (!user) throw new ForbiddenException('No user!');
     delete user.password;
-    // delete user.id;
     delete user.createdAt;
     delete user.updatedAt;
 
@@ -44,6 +39,5 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
         ...user,
       },
     };
-    // return payload
   }
 }

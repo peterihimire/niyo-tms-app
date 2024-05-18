@@ -33,8 +33,6 @@ export class AuthService {
         },
       });
 
-      console.log('This is for user...', user);
-
       delete user.password;
       delete user.id;
 
@@ -76,7 +74,6 @@ export class AuthService {
       delete user.updatedAt;
 
       const token = await this.signToken(user.acctId, user.email);
-      // console.log('Access_token...', token.access_token, user);
       res.cookie('token', token.access_token, { httpOnly: true });
 
       res.json({
@@ -109,7 +106,7 @@ export class AuthService {
       expiresIn: '10h',
       secret: secret,
     });
-    console.log('Signed token...', token);
+
     return {
       access_token: token,
     };
