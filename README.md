@@ -21,8 +21,6 @@ This is a Node.JS RestAPI task application powered by NestJS a framework built o
 
 - "argon2"
 - "cookie-parser"
-- "cors"
-- "dotenv"
 - "express"
 - "express-session"
 - "passport"
@@ -53,17 +51,41 @@ DATABASE_URL=postgresql://postgres:testing123@localhost:5432/task_manager?schema
 JWT_SECRET=randomsecretforyou
 ```
 
+From your bash command line, inside of the root directory of app, run $`npm install` to install its dependencies.
+
+Once the dependencies are installed, run `npx prisma generate` to generate prisma client for the application. This prisma client are the database types, we can use in the application instead of writing out our own types.
+
+Finally you can run $`npm run start` to start the application.
+
+To test the API endpoints you can use postman or insomnia,if you wish, you can add to your global environment variable for the base url: `http://127.0.0.1:8090/api/taskmgt/v1` and name it whatever you wish, mine is `{{TMS}}`. Save it and proceed to test the api.
+
 ---
 
 ## Usage
 
-After cloning the repo to your desktop, added your .env file and wired up your postgreSQL database string url, and database configuration, edit your jwt secret . From your bash command line, inside of the root directory of app, run $`npm install` to install its dependencies.
+The app is divided into two sections , the HTTP section serving the REST-API and the Websocket(Socket.io) section serving the Real-time communication.
 
-Once the dependencies are installed, run `npx prisma generate` to generate prisma client for the application. This prisma client are the database types, we can use in the application instead of writing out our own types. Finally you can run $`npm run start` to start the application.
+The REST-API handles the signup, signin, user-info and task CRUD, while the Websocket handles the real-time communication for when a task is CREATED, UPDATED and DELETED, it updates connected clients when such actions takes place.
 
-To test the API endpoints you can use postman or insomnia,if you wish, you can add to your global environment variable for the base url: `http://127.0.0.1:8090/api/taskmgt/v1` and name it whatever you wish, mine is `{{SAPI}}`. Save it and proceed to test the api.
+- **Example of the REST-API:** Use this endpoint to test if the API is working , for success and fail you will get the following responses
 
-- **Test Endpoint:** Use this endpoint to test if the API is working , for success and fail you will get the following responses
+  ![Cookie](https://res.cloudinary.com/dymhdpka1/image/upload/v1694963431/Screenshot_2023-09-17_at_3.44.56_PM_sfqtao.png)
+
+  ```js
+  {
+   "status": "success",
+   "msg": "Silex Test API was initiated successfully!"
+  }
+  ```
+
+  ```js
+  {
+    "status": "fail",
+    "msg": "Could not find this route, make sure the URL is correct !"
+  }
+  ```
+
+- **Example of the Websocket:** Use this endpoint to test if the API is working , for success and fail you will get the following responses
 
   ![Cookie](https://res.cloudinary.com/dymhdpka1/image/upload/v1694963431/Screenshot_2023-09-17_at_3.44.56_PM_sfqtao.png)
 
