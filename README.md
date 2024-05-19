@@ -129,7 +129,10 @@ The application is divided into two main sections: the HTTP section serving the 
 
 ### Websocket(Socket.IO) Examples
 
-- **Connect to the Websocker Server:** In Postman, create a new request and select the Socket.IO protocol. Enter the base URL: `http://127.0.0.1:8090/api/taskmgt/v1`.
+- **Connect to the Websocker Server:** In Postman, create a new request and select the Socket.IO protocol. Enter the base URL: `http://127.0.0.1:8090/api/taskmgt/v1`. 
+
+  **Note:**  Always make sure, that the `Http server protol for the Nest application is up and running before connecting to the websocket server`.
+
   ![WebSocket Connection](https://res.cloudinary.com/dymhdpka1/image/upload/v1716118073/Screenshot_2024-05-19_at_12.24.13_PM_as0msi.png)
 
 - **Listen to Events:** Add events for `taskCreated`,`taskUpdated` , and `taskDeleted`. Turn on the listening for these events and connect to the server. You should see a connection confirmation message.
