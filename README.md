@@ -83,8 +83,10 @@ The application is divided into two main sections: the HTTP section serving the 
 
 - **Signup User:** Use this endpoint: http://127.0.0.1:8090/api/taskmgt/v1/auth/signup. The response will look like this:
   ![Cookie](https://res.cloudinary.com/dymhdpka1/image/upload/v1716117055/Screenshot_2024-05-19_at_11.21.44_AM_gwdcmq.png)
+
 - **Signin User:** Use this endpoint: http://127.0.0.1:8090/api/taskmgt/v1/auth/signin. A JWT token will be attached to a cookie in the response header:
   ![Cookie](https://res.cloudinary.com/dymhdpka1/image/upload/v1716117054/Screenshot_2024-05-19_at_11.24.34_AM_tonfxh.png)
+
 - **Create Task:** Use this endpoint: http://127.0.0.1:8090/api/taskmgt/v1/tasks/add_task. First, select Bearer Token in the Authorization tab and paste the token from the signin response. Then, add the following fields in the Body tab:
 
   ```json
@@ -125,17 +127,16 @@ The application is divided into two main sections: the HTTP section serving the 
 
   ![Cookie](https://res.cloudinary.com/dymhdpka1/image/upload/v1716117055/Screenshot_2024-05-19_at_11.26.16_AM_hxlwhy.png)
 
-  ### Websocket(Socket.IO) Examples
+### Websocket(Socket.IO) Examples
 
-  - **Connect to the Websocker Server:** In Postman, create a new request and select the Socket.IO protocol. Enter the base URL: `http://127.0.0.1:8090/api/taskmgt/v1`.
-    ![Cookie](https://res.cloudinary.com/dymhdpka1/image/upload/v1716118073/Screenshot_2024-05-19_at_12.24.13_PM_as0msi.png)
-  - **Listen to Events:** Add events for `taskCreated`,`taskUpdated` , and `taskDeleted`. Turn on the listening for these events and connect to the server. You should see a connection confirmation message.
-    ![Cookie](https://res.cloudinary.com/dymhdpka1/image/upload/v1716118073/Screenshot_2024-05-19_at_12.25.23_PM_t4icin.png)
+- **Connect to the Websocker Server:** In Postman, create a new request and select the Socket.IO protocol. Enter the base URL: `http://127.0.0.1:8090/api/taskmgt/v1`.
+  ![Cookie](https://res.cloudinary.com/dymhdpka1/image/upload/v1716118073/Screenshot_2024-05-19_at_12.24.13_PM_as0msi.png)
+  
+- **Listen to Events:** Add events for `taskCreated`,`taskUpdated` , and `taskDeleted`. Turn on the listening for these events and connect to the server. You should see a connection confirmation message.
+  ![Cookie](https://res.cloudinary.com/dymhdpka1/image/upload/v1716118073/Screenshot_2024-05-19_at_12.25.23_PM_t4icin.png)
 
 ---
 
 ## Postman Documentation
 
 For more detailed information and API documentation, visit the [Postman Documentation](https://documenter.getpostman.com/view/12340633/2sA3QmCuJs).
-
- 
