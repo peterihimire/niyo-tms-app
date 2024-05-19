@@ -130,10 +130,13 @@ The application is divided into two main sections: the HTTP section serving the 
 ### Websocket(Socket.IO) Examples
 
 - **Connect to the Websocker Server:** In Postman, create a new request and select the Socket.IO protocol. Enter the base URL: `http://127.0.0.1:8090/api/taskmgt/v1`.
-  ![Cookie](https://res.cloudinary.com/dymhdpka1/image/upload/v1716118073/Screenshot_2024-05-19_at_12.24.13_PM_as0msi.png)
-  
+  ![WebSocket Connection](https://res.cloudinary.com/dymhdpka1/image/upload/v1716118073/Screenshot_2024-05-19_at_12.24.13_PM_as0msi.png)
+
 - **Listen to Events:** Add events for `taskCreated`,`taskUpdated` , and `taskDeleted`. Turn on the listening for these events and connect to the server. You should see a connection confirmation message.
-  ![Cookie](https://res.cloudinary.com/dymhdpka1/image/upload/v1716118073/Screenshot_2024-05-19_at_12.25.23_PM_t4icin.png)
+  ![WebSocket Events](https://res.cloudinary.com/dymhdpka1/image/upload/v1716118073/Screenshot_2024-05-19_at_12.25.23_PM_t4icin.png)
+
+- **Events Examples Response:** Once a task is `Created`,`Updated` , and `Deleted` the following information in real-time will be sent to connectd users of the websocket server.
+  ![Event Response](https://res.cloudinary.com/dymhdpka1/image/upload/v1716135987/Screenshot_2024-05-19_at_5.22.49_PM_va7s7u.png)
 
 ---
 

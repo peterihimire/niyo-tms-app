@@ -32,7 +32,6 @@ export class TaskService {
         );
       }
 
-      console.log('This is add-task dto  payload', dto);
       // Logger.verbose('This is user payload', user);
 
       const date = new Date(dto?.dueDate);
